@@ -1,5 +1,9 @@
 # Borsch Router
 
+[![Build Status](https://travis-ci.com/borschphp/borsch-router.svg?branch=master)](https://travis-ci.com/borschphp/borsch-router)
+[![Latest Stable Version](https://poser.pugx.org/borschphp/router/v)](//packagist.org/packages/borschphp/router)
+[![License](https://poser.pugx.org/borschphp/router/license)](//packagist.org/packages/borschphp/router)
+
 A FastRoute router implementation, inspired by the one you can find in the excellent [Mezzio Routing Interfaces](https://docs.mezzio.dev/mezzio/v3/features/router/interface/).  
 The router is based on [nikic/fastroute](https://github.com/nikic/FastRoute) request router.  
 
