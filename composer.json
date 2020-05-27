@@ -1,0 +1,32 @@
+{
+  "name": "borschphp/router",
+  "description": "A FastRoute router implementation.",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Alexandre DEBUSSCHÈRE",
+      "email": "zizilex@gmail.com"
+    }
+  ],
+  "require": {
+    "php": "^7.1",
+    "psr/http-message": "1.0.1",
+    "psr/http-server-handler": "1.0.1",
+    "psr/http-server-middleware": "1.0.1",
+    "nikic/fast-route": "v1.3.0"
+  },
+  "require-dev": {
+    "laminas/laminas-diactoros": "2.3.0",
+    "phpunit/phpunit": "^9.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "Borsch\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "BorschTest\\": "tests/"
+    }
+  }
+}
