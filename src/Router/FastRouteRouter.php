@@ -24,7 +24,7 @@ class FastRouteRouter implements RouterInterface
     /** @var RouteInterface[]  */
     protected $routes = [];
 
-    /** @var string */
+    /** @var null|string */
     protected $cache_file;
 
     /** @var bool */
