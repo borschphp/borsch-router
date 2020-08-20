@@ -98,7 +98,7 @@ class FastRouteRouter implements RouterInterface
      */
     public function match(ServerRequestInterface $request): RouteResultInterface
     {
-        $dispatcher = $this->getDispatcher(function (RouteCollector $collector) {
+        $dispatcher = $this->getDispatcher(function(RouteCollector $collector) {
             foreach ($this->routes as $route) {
                 $collector->addRoute($route->getAllowedMethods(), $route->getPath(), $route->getName());
             }
@@ -117,6 +117,40 @@ class FastRouteRouter implements RouterInterface
             $route_info[0] == Dispatcher::METHOD_NOT_ALLOWED ?
                 $route_info[1] : []
         );
+    }
+
+    /**
+     * @param string $name
+     * @param array $substitutions
+     * @return string
+     * @throws InvalidArgumentException
+     * @throws RuntimeException
+     */
+    public function generateUri(string $name, array $substitutions = []): string
+    {
+        if (!isset($this->routes[$name])) {
+            throw new InvalidArgumentException(sprintf(
+                'The route named %s is unknown...',
+                $name
+            ));
+        }
+
+        // Reverse the array so we start by the longest possible URI.
+        $routes = array_reverse((new Std())->parse($this->routes[$name]->getPath()));
+
+        foreach ($routes as $parts) {
+            if (!$this->routeCanBeGenerated($parts, $substitutions)) {
+                continue;
+            }
+
+            return $this->buildUri($parts, $substitutions);
+        }
+
+        throw new RuntimeException(sprintf(
+            'Unable to generate URI "%s", missing substitutions, only received : %s...',
+            $this->routes[$name]->getPath(),
+            implode(', ', $substitutions)
+        ));
     }
 
     /**
@@ -140,51 +174,32 @@ class FastRouteRouter implements RouterInterface
     }
 
     /**
-     * @inheritDoc
+     * @param array $parts
+     * @param array $substitutions
+     * @return string
+     * @throws RuntimeException
      */
-    public function generateUri(string $name, array $substitutions = []): string
+    protected function buildUri(array $parts, array $substitutions): string
     {
-        if (!isset($this->routes[$name])) {
-            throw new InvalidArgumentException(sprintf(
-                'The route named %s is unknown...',
-                $name
-            ));
-        }
-
-        // Reverse the array so we start by the longest possible URI.
-        $routes = array_reverse((new Std())->parse($this->routes[$name]->getPath()));
-
-        foreach ($routes as $parts) {
-            if (!$this->routeCanBeGenerated($parts, $substitutions)) {
+        $uri = '';
+        foreach ($parts as $part) {
+            if (is_string($part)) {
+                $uri .= $part;
                 continue;
             }
 
-            $uri = '';
-            foreach ($parts as $part) {
-                if (is_string($part)) {
-                    $uri .= $part;
-                    continue;
-                }
-
-                if (!preg_match('#^'.$part[1].'$#', (string)$substitutions[$part[0]])) {
-                    throw new RuntimeException(sprintf(
-                        'Given substitution for "%s" (= %s) does not match the route constraint "%s"...',
-                        $part[0],
-                        (string)$substitutions[$part[0]],
-                        $part[1]
-                    ));
-                }
-
-                $uri .= $substitutions[$part[0]];
+            if (!preg_match('#^'.$part[1].'$#', (string)$substitutions[$part[0]])) {
+                throw new RuntimeException(sprintf(
+                    'Given substitution for "%s" (= %s) does not match the route constraint "%s"...',
+                    $part[0],
+                    (string)$substitutions[$part[0]],
+                    $part[1]
+                ));
             }
 
-            return $uri;
+            $uri .= $substitutions[$part[0]];
         }
 
-        throw new RuntimeException(sprintf(
-            'Unable to generate URI "%s", missing substitutions, only received : %s...',
-            $this->routes[$name]->getPath(),
-            implode(', ', $substitutions)
-        ));
+        return $uri;
     }
 }
