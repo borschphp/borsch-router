@@ -31,7 +31,7 @@ class Route implements RouteInterface
      */
     public function __construct(array $methods, string $path, RequestHandlerInterface $handler, ?string $name = null)
     {
-        $this->methods = array_map('strtoupper', $methods);
+        $this->methods = array_map('strtoupper', array_filter($methods, 'is_string'));
         $this->path = $path;
         $this->handler = $handler;
         $this->name = $name ?: sprintf(
