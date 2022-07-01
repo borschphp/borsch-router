@@ -5,14 +5,18 @@
 
 namespace Borsch\Router;
 
-use FastRoute\Dispatcher;
-use FastRoute\RouteCollector;
-use FastRoute\RouteParser\Std;
+use FastRoute\{
+    Dispatcher,
+    RouteCollector,
+    RouteParser\Std
+};
 use InvalidArgumentException;
 use Psr\Http\Message\ServerRequestInterface;
 use RuntimeException;
-use function FastRoute\cachedDispatcher;
-use function FastRoute\simpleDispatcher;
+use function FastRoute\{
+    cachedDispatcher,
+    simpleDispatcher
+};
 
 /**
  * Class FastRouteRouter
@@ -21,14 +25,17 @@ use function FastRoute\simpleDispatcher;
 class FastRouteRouter implements RouterInterface
 {
 
-    /** @var RouteInterface[]  */
-    protected $routes = [];
-
-    /** @var null|string */
-    protected $cache_file;
-
-    /** @var bool */
-    protected $cache_disabled = false;
+    /**
+     * @param RouteInterface[] $routes
+     * @param string|null $cache_file
+     * @param bool $cache_disabled
+     */
+    public function __construct(
+        /** @var RouteInterface[]  */
+        protected array $routes = [],
+        protected ?string $cache_file = null,
+        protected bool $cache_disabled = false
+    ) {}
 
     /**
      * @return null|string

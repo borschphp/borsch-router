@@ -5,8 +5,10 @@
 
 namespace Borsch\Router;
 
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\{
+    ResponseInterface,
+    ServerRequestInterface
+};
 use Psr\Http\Server\RequestHandlerInterface;
 
 /**
@@ -17,16 +19,16 @@ class RouteResult implements RouteResultInterface
 {
 
     /** @var RouteInterface */
-    protected $route;
+    protected RouteInterface $route;
 
     /** @var array */
-    protected $params = [];
+    protected array $params = [];
 
     /** @var bool */
-    protected $success;
+    protected bool $success;
 
-    /** @var array */
-    protected $methods;
+    /** @var array|null */
+    protected ?array $methods = null;
 
     /**
      * RouteResult constructor.
@@ -51,7 +53,7 @@ class RouteResult implements RouteResultInterface
      */
     public static function fromRouteFailure(array $methods): RouteResultInterface
     {
-        $result = new self();
+        $result = new static();
         $result->success = false;
         $result->methods = $methods;
 
@@ -69,7 +71,7 @@ class RouteResult implements RouteResultInterface
     /**
      * @inheritDoc
      */
-    public function getMatchedRoute()
+    public function getMatchedRoute(): RouteInterface|false
     {
         if ($this->success) {
             return $this->route;
@@ -81,7 +83,7 @@ class RouteResult implements RouteResultInterface
     /**
      * @inheritDoc
      */
-    public function getMatchedRouteName()
+    public function getMatchedRouteName(): string|false
     {
         if ($this->success) {
             return $this->route->getName();

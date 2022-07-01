@@ -14,26 +14,16 @@ use Psr\Http\Server\RequestHandlerInterface;
 class Route implements RouteInterface
 {
 
-    /** @var array */
-    protected $methods;
-
-    /** @var string */
-    protected $path;
-
-    /** @var RequestHandlerInterface */
-    protected $handler;
-
-    /** @var string */
-    protected $name;
-
     /**
      * @inheritDoc
      */
-    public function __construct(array $methods, string $path, RequestHandlerInterface $handler, ?string $name = null)
-    {
+    public function __construct(
+        protected array $methods,
+        protected string $path,
+        protected RequestHandlerInterface $handler,
+        protected ?string $name = null
+    ) {
         $this->methods = array_map('strtoupper', array_filter($methods, 'is_string'));
-        $this->path = $path;
-        $this->handler = $handler;
         $this->name = $name ?: sprintf(
             '%s^%s',
             implode(':', $this->methods),
