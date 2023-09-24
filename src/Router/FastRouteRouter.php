@@ -103,6 +103,14 @@ class FastRouteRouter implements RouterInterface
     /**
      * @inheritDoc
      */
+    public function getRoutes(): array
+    {
+        return $this->routes;
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function match(ServerRequestInterface $request): RouteResultInterface
     {
         $dispatcher = $this->getDispatcher(function(RouteCollector $collector) {

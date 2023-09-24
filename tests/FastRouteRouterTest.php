@@ -66,6 +66,28 @@ class FastRouteRouterTest extends TestCase
         ));
     }
 
+    public function testGetRoutes()
+    {
+        $r1 = new Route(
+            ['GET'],
+            '/articles/{id:\d+}[/{title}]',
+            new TestHandler(),
+            'r1'
+        );
+
+        $r2 = new Route(
+            ['POST'],
+            '/articles',
+            new TestHandler(),
+            'r2'
+        );
+
+        $this->router->addRoute($r1);
+        $this->router->addRoute($r2);
+
+        $this->assertEquals(['r1' => $r1, 'r2' => $r2], $this->router->getRoutes());
+    }
+
     public function testGenerateUri()
     {
         $this->router->addRoute(new Route(

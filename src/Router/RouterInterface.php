@@ -22,6 +22,11 @@ interface RouterInterface
     public function addRoute(RouteInterface $route): void;
 
     /**
+     * @return RouteInterface[]
+     */
+    public function getRoutes(): array;
+
+    /**
      * @param ServerRequestInterface $request
      * @return RouteResultInterface
      */
