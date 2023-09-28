@@ -1,6 +1,6 @@
 # Borsch Router
 
-[![Build Status](https://travis-ci.com/borschphp/borsch-router.svg?branch=master)](https://travis-ci.com/borschphp/borsch-router)
+[![PHP Composer](https://github.com/borschphp/borsch-router/actions/workflows/php.yml/badge.svg)](https://github.com/borschphp/borsch-router/actions/workflows/php.yml)
 [![Latest Stable Version](https://poser.pugx.org/borschphp/router/v)](//packagist.org/packages/borschphp/router)
 [![License](https://poser.pugx.org/borschphp/router/license)](//packagist.org/packages/borschphp/router)
 
