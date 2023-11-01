@@ -2,6 +2,7 @@
 
 use Borsch\Router\FastRouteRouter;
 use Borsch\Router\Route;
+use Borsch\Router\SimpleConditionalRouter;
 use BorschTest\Mockup\TestHandler;
 
 uses()
@@ -20,3 +21,9 @@ uses()
         $this->router = new FastRouteRouter();
     })
     ->in('Unit/FastRouteRouterTest.php');
+
+uses()
+    ->beforeEach(function () {
+        $this->router = new SimpleConditionalRouter();
+    })
+    ->in('Unit/SimpleConditionalRouterTest.php');
