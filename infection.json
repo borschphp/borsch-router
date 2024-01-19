@@ -1,0 +1,20 @@
+{
+    "$schema": "https://raw.githubusercontent.com/infection/infection/0.26.6/resources/schema.json",
+    "source": {
+        "directories": [
+            "src"
+        ],
+        "excludes": [
+            "/Interface\\.php/"
+        ]
+    },
+    "timeout": 5,
+    "logs": {
+        "text": "infection.log",
+        "html": "infection.html"
+    },
+    "mutators": {
+        "@default": true
+    },
+    "testFramework": "pest"
+}

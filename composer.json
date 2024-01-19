@@ -17,7 +17,8 @@
   },
   "require-dev": {
     "laminas/laminas-diactoros": "^3",
-    "pestphp/pest": "^2.6"
+    "pestphp/pest": "^2.6",
+    "nikic/php-parser": "^v4.18"
   },
   "autoload": {
     "psr-4": {
