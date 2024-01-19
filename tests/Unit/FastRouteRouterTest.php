@@ -68,6 +68,14 @@ test('generateUri() throws exception when route name does not exist', function()
     $this->router->generateUri('non-existing-route-name', []);
 })->throws(InvalidArgumentException::class);
 
+test('generateUri() throws exception when route parts does not match constraint', function() {
+    $this->router->addRoute(new Route(['GET'], '/articles/{id:\d+}[/{title}]', new TestHandler(), 'test'));
+    $this->router->generateUri('test', ['id' => 'avion']);
+})->throws(
+    RuntimeException::class,
+    'Given substitution for "id" (= avion) does not match the route constraint "\d+"...'
+);
+
 test('match()', function() {
     $this->router->addRoute(new Route(['GET'], '/articles/{id:\d+}[/{title}]', new TestHandler(), 'test'));
     $server_request = new ServerRequest([], [], 'http://example.com/articles/42/blog-post', 'GET');
@@ -85,6 +93,34 @@ test('match() with matched parameters', function() {
     $route = $this->router->match($server_request);
 
     expect($route->getMatchedParams())->toBe(['id' => '42', 'title' => 'blog-post']);
+});
+
+test('match() with route failure Method Not Allowed', function () {
+    $this->router->addRoute(new Route(['GET'], '/articles/{id:\d+}[/{title}]', new TestHandler(), 'test'));
+    $server_request = new ServerRequest([], [], 'http://example.com/articles/42/title', 'POST');
+
+    /** @var RouteResultInterface $route */
+    $route = $this->router->match($server_request);
+
+    expect($route->isFailure())->toBeTrue()
+        ->and($route->isMethodFailure())->toBeTrue()
+        ->and($route->getAllowedMethods())->toBeArray()
+        ->and($route->getAllowedMethods())->toHaveCount(1)
+        ->and($route->getAllowedMethods())->toContain('GET');
+});
+
+test('match() with route failure Not Found', function () {
+    $this->router->addRoute(new Route(['GET'], '/articles/{id:\d+}[/{title}]', new TestHandler(), 'test'));
+    $server_request = new ServerRequest([], [], 'http://example.com/pokemon/25', 'POST');
+
+    /** @var RouteResultInterface $route */
+    $route = $this->router->match($server_request);
+
+    expect($route->isFailure())->toBeTrue()
+        ->and($route->isMethodFailure())->toBeFalse()
+        ->and($route->getAllowedMethods())->toBeArray()
+        ->and($route->getAllowedMethods())->toHaveCount(0)
+    ;
 });
 
 test('setCacheFile()', function() {

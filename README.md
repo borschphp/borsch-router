@@ -35,6 +35,7 @@
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
+    <li><a href="#testing">Testing</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
@@ -102,6 +103,28 @@ $response = $route->getHandler()->handle($server_request);
 
 // Send the response back to the client or other...
 ```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- Testing -->
+## Testing
+
+This package uses `Pest` as test framework.  
+To run tests :
+
+```shell
+./vendor/bin/pest tests
+```
+
+Mutation testing has also been used to create this package, with `Infection`.  
+More information on [Infection page](https://infection.github.io/guide/index.html).  
+To run mutation tests, install `infection` as described in the documentation, then run this command:
+
+```shell
+XDEBUG_MODE=coverage infection
+```
+
+An text based and HTML report will be generated in the project folder.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
