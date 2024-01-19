@@ -150,7 +150,7 @@ class FastRouteRouter implements RouterInterface
             ));
         }
 
-        // Reverse the array so we start by the longest possible URI.
+        // Reverse the array, so we start by the longest possible URI.
         $routes = array_reverse((new Std())->parse($this->routes[$name]->getPath()));
 
         foreach ($routes as $parts) {
@@ -207,7 +207,7 @@ class FastRouteRouter implements RouterInterface
                 throw new RuntimeException(sprintf(
                     'Given substitution for "%s" (= %s) does not match the route constraint "%s"...',
                     $part[0],
-                    (string)$substitutions[$part[0]],
+                    $substitutions[$part[0]],
                     $part[1]
                 ));
             }

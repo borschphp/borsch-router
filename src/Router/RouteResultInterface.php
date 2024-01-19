@@ -35,12 +35,12 @@ interface RouteResultInterface extends MiddlewareInterface
     /**
      * @return false|RouteInterface
      */
-    public function getMatchedRoute();
+    public function getMatchedRoute(): false|RouteInterface;
 
     /**
      * @return false|string
      */
-    public function getMatchedRouteName();
+    public function getMatchedRouteName(): false|string;
 
     /**
      * @return array

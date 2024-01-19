@@ -18,16 +18,9 @@ use Psr\Http\Server\RequestHandlerInterface;
 class RouteResult implements RouteResultInterface
 {
 
-    /** @var RouteInterface */
     protected RouteInterface $route;
-
-    /** @var array */
     protected array $params = [];
-
-    /** @var bool */
     protected bool $success;
-
-    /** @var array|null */
     protected ?array $methods = null;
 
     /**
