@@ -1,6 +1,9 @@
 <?php
 
+use Borsch\Router\Route;
 use Psr\Http\Server\RequestHandlerInterface;
+
+covers(Route::class);
 
 test('setName() and getName()', function() {
     $this->route->setName('my route');

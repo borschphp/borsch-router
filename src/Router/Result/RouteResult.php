@@ -1,14 +1,10 @@
 <?php
-/**
- * @author debuss-a
- */
 
-namespace Borsch\Router;
+namespace Borsch\Router\Result;
 
-use Psr\Http\Message\{
-    ResponseInterface,
-    ServerRequestInterface
-};
+use Borsch\Router\Contract\RouteInterface;
+use Borsch\Router\Contract\RouteResultInterface;
+use Psr\Http\Message\{ResponseInterface, ServerRequestInterface};
 use Psr\Http\Server\RequestHandlerInterface;
 
 /**
@@ -21,13 +17,13 @@ class RouteResult implements RouteResultInterface
     /** @var RouteInterface */
     protected RouteInterface $route;
 
-    /** @var array */
+    /** @var array<string, mixed> */
     protected array $params = [];
 
     /** @var bool */
     protected bool $success;
 
-    /** @var array|null */
+    /** @var string[]|null */
     protected ?array $methods = null;
 
     /**
@@ -40,7 +36,7 @@ class RouteResult implements RouteResultInterface
      */
     public static function fromRouteSuccess(RouteInterface $route, array $params = []): RouteResultInterface
     {
-        $result = new static();
+        $result = new self();
         $result->success = true;
         $result->route = $route;
         $result->params = $params;
@@ -53,7 +49,7 @@ class RouteResult implements RouteResultInterface
      */
     public static function fromRouteFailure(array $methods): RouteResultInterface
     {
-        $result = new static();
+        $result = new self();
         $result->success = false;
         $result->methods = $methods;
 

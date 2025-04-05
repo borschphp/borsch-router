@@ -1,10 +1,11 @@
 <?php
-/**
- * @author debuss-a
- */
 
 namespace Borsch\Router;
 
+use Borsch\Router\Contract\RouteInterface;
+use Borsch\Router\Contract\RouteResultInterface;
+use Borsch\Router\Contract\RouterInterface;
+use Borsch\Router\Result\RouteResult;
 use InvalidArgumentException;
 use Psr\Http\Message\ServerRequestInterface;
 

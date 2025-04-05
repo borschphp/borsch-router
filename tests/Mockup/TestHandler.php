@@ -1,7 +1,4 @@
 <?php
-/**
- * @author debuss-a
- */
 
 namespace BorschTest\Mockup;
 

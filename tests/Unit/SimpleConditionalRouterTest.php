@@ -1,9 +1,12 @@
 <?php
 
+use Borsch\Router\Contract\RouteResultInterface;
 use Borsch\Router\Route;
-use Borsch\Router\RouteResultInterface;
+use Borsch\Router\SimpleConditionalRouter;
 use BorschTest\Mockup\TestHandler;
 use Laminas\Diactoros\ServerRequest;
+
+covers(SimpleConditionalRouter::class);
 
 test('addRoute() throws exception when route name already exists', function() {
     $this->router->addRoute(new Route(

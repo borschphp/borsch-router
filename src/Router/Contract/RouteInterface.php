@@ -1,9 +1,6 @@
 <?php
-/**
- * @author debuss-a
- */
 
-namespace Borsch\Router;
+namespace Borsch\Router\Contract;
 
 use Psr\Http\Server\RequestHandlerInterface;
 
@@ -43,7 +40,7 @@ interface RouteInterface
     public function getHandler(): RequestHandlerInterface;
 
     /**
-     * @return array
+     * @return string[]
      */
     public function getAllowedMethods(): array;
 

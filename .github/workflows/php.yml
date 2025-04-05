@@ -1,4 +1,4 @@
-name: PHP Composer
+name: Tests
 
 on:
   push:
@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        php: [ '8.1', '8.2' ]
+        php: [ '8.2', '8.3', '8.4' ]
 
     name: PHP ${{ matrix.php }}
 
@@ -41,3 +41,6 @@ jobs:
 
       - name: Run test suite
         run:  ./vendor/bin/pest tests
+
+      - name: Run mutation tests
+        run:  XDEBUG_MODE=coverage ./vendor/bin/pest --mutate --parallel --min=70

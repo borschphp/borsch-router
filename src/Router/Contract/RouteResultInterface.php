@@ -1,9 +1,6 @@
 <?php
-/**
- * @author debuss-a
- */
 
-namespace Borsch\Router;
+namespace Borsch\Router\Contract;
 
 use Psr\Http\Server\MiddlewareInterface;
 
@@ -16,13 +13,13 @@ interface RouteResultInterface extends MiddlewareInterface
 
     /**
      * @param RouteInterface $route
-     * @param array $params
+     * @param array<string, mixed> $params
      * @return RouteResultInterface
      */
     public static function fromRouteSuccess(RouteInterface $route, array $params = []): RouteResultInterface;
 
     /**
-     * @param array $methods
+     * @param string[] $methods
      * @return RouteResultInterface
      */
     public static function fromRouteFailure(array $methods): RouteResultInterface;
@@ -35,15 +32,15 @@ interface RouteResultInterface extends MiddlewareInterface
     /**
      * @return false|RouteInterface
      */
-    public function getMatchedRoute();
+    public function getMatchedRoute(): false|RouteInterface;
 
     /**
      * @return false|string
      */
-    public function getMatchedRouteName();
+    public function getMatchedRouteName(): false|string;
 
     /**
-     * @return array
+     * @return array<string, mixed>
      */
     public function getMatchedParams(): array;
 

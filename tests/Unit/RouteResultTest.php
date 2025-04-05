@@ -1,11 +1,12 @@
 <?php
 
+use Borsch\Router\Result\RouteResult;
 use Borsch\Router\Route;
-use Borsch\Router\RouteResult;
-use BorschTest\Mockup\RequestHandler;
-use BorschTest\Mockup\TestHandler;
+use BorschTest\Mockup\{RequestHandler, TestHandler};
 use Laminas\Diactoros\ServerRequest;
 use Psr\Http\Message\ResponseInterface;
+
+covers(RouteResult::class);
 
 test('fromRouteSuccess()', function () {
     $route = new Route(['GET'], '/articles/{id:\d+}[/{title}]', new TestHandler(), 'test');

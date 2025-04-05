@@ -1,9 +1,6 @@
 <?php
-/**
- * @author debuss-a
- */
 
-namespace Borsch\Router;
+namespace Borsch\Router\Contract;
 
 use InvalidArgumentException;
 use Psr\Http\Message\ServerRequestInterface;
@@ -34,7 +31,7 @@ interface RouterInterface
 
     /**
      * @param string $name
-     * @param array $substitutions
+     * @param array<string, string> $substitutions
      * @return string
      * @throws InvalidArgumentException If the route name is unknown.
      */
