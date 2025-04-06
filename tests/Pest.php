@@ -3,6 +3,7 @@
 use Borsch\Router\FastRouteRouter;
 use Borsch\Router\Route;
 use Borsch\Router\SimpleConditionalRouter;
+use Borsch\Router\TreeRouter;
 use BorschTest\Mockup\TestHandler;
 
 uses()
@@ -27,3 +28,9 @@ uses()
         $this->router = new SimpleConditionalRouter();
     })
     ->in('Unit/SimpleConditionalRouterTest.php');
+
+uses()
+    ->beforeEach(function () {
+        $this->router = new TreeRouter();
+    })
+    ->in('Unit/TreeRouterTest.php');

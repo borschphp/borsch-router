@@ -1,10 +1,8 @@
 <?php
-/**
- * @author debuss-a
- */
 
 namespace Borsch\Router;
 
+use Borsch\Router\Contract\RouteInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 /**

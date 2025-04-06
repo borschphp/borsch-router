@@ -11,10 +11,10 @@
     <h3 align="center">Borsch Router</h3>
 
   <p align="center">
-    An awesome FastRoute router implementation based on nikic/fast-route request router.
+    An awesome router implementation with support for multiple routing engines, including `nikic/fast-route`.
     <!--
     <br />
-    <a href="https://github.com/othneildrew/Best-README-Template"><strong>Explore the docs »</strong></a>
+    <a href="#"><strong>Explore the docs »</strong></a>
     -->
   </p>
 </div>
@@ -46,8 +46,12 @@
 
 ## About The Project
 
-A FastRoute router implementation, inspired by the one you can find in the excellent [Mezzio Routing Interfaces](https://docs.mezzio.dev/mezzio/v3/features/router/interface/).  
-The router is based on [nikic/fastroute](https://github.com/nikic/FastRoute) request router.
+A collection of router implementations, inspired by the one you can find in the excellent [Mezzio Routing Interfaces](https://docs.mezzio.dev/mezzio/v3/features/router/interface/).
+Among them :
+
+- a router is based on [nikic/fast-route](https://github.com/nikic/FastRoute)
+- a router is based on a tree structure
+- a router is based on a simple comparator
 
 You need to provide a PSR-7 ServerRequestInterface in order to match the routes.  
 A PSR-7 ResponseInterface must be returned by the route handler.
@@ -59,7 +63,7 @@ A PSR-7 ResponseInterface must be returned by the route handler.
 
 ### Prerequisites
 
-You need `PHP >= 8.1` to use `Borsch\Router` but the latest stable version of PHP is always recommended.
+You need `PHP >= 8.2` to use `Borsch\Router` but the latest stable version of PHP is always recommended.
 
 It also requires an implementation of PSR-7 HTTP Message.  
 The Laminas Diactoros Project is used for testing, and in the examples below.
@@ -104,6 +108,14 @@ $response = $route->getHandler()->handle($server_request);
 // Send the response back to the client or other...
 ```
 
+### Available routers
+
+| Router Name               | Description                           | Cache | Speed     | Speed with cache | Variables  | Optional Parts |
+|---------------------------|---------------------------------------|-------|-----------|------------------|------------|----------------|
+| `FastRouteRouter`         | A `nikic/fast-route` based router     | ✅     | Medium    | Fast             | ✅          | ✅             |
+| `TreeRouter`              | A tree based router                   | ✅     | Fast      | Very fast        | ✅          | ❌             |
+| `SimpleConditionalRouter` | A very simple comparator based router | ❌     | Very fast | Very fast        | ❌          | ❌              |
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- Testing -->
@@ -116,15 +128,11 @@ To run tests :
 ./vendor/bin/pest tests
 ```
 
-Mutation testing has also been used to create this package, with `Infection`.  
-More information on [Infection page](https://infection.github.io/guide/index.html).  
-To run mutation tests, install `infection` as described in the documentation, then run this command:
+Mutation testing has also been added to this package:
 
 ```shell
-XDEBUG_MODE=coverage infection
+XDEBUG_MODE=coverage ./vendor/bin/pest --mutate --parallel
 ```
-
-An text based and HTML report will be generated in the project folder.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

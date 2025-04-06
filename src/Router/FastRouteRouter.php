@@ -1,22 +1,15 @@
 <?php
-/**
- * @author debuss-a
- */
 
 namespace Borsch\Router;
 
-use FastRoute\{
-    Dispatcher,
-    RouteCollector,
-    RouteParser\Std
-};
-use InvalidArgumentException;
+use Borsch\Router\Contract\RouteInterface;
+use Borsch\Router\Contract\RouteResultInterface;
+use Borsch\Router\Contract\RouterInterface;
+use Borsch\Router\Exception\{InvalidArgumentException, RuntimeException};
+use Borsch\Router\Result\RouteResult;
+use FastRoute\{Dispatcher, RouteCollector, RouteParser\Std};
 use Psr\Http\Message\ServerRequestInterface;
-use RuntimeException;
-use function FastRoute\{
-    cachedDispatcher,
-    simpleDispatcher
-};
+use function FastRoute\{cachedDispatcher, simpleDispatcher};
 
 /**
  * Class FastRouteRouter
@@ -31,10 +24,10 @@ class FastRouteRouter implements RouterInterface
      * @param bool $cache_disabled
      */
     public function __construct(
-        /** @var RouteInterface[]  */
-        protected array $routes = [],
+        /** @var RouteInterface[] */
+        protected array   $routes = [],
         protected ?string $cache_file = null,
-        protected bool $cache_disabled = false
+        protected bool    $cache_disabled = false
     ) {}
 
     /**
@@ -87,14 +80,12 @@ class FastRouteRouter implements RouterInterface
 
     /**
      * @inheritDoc
+     * @throws InvalidArgumentException
      */
     public function addRoute(RouteInterface $route): void
     {
         if (isset($this->routes[$route->getName()])) {
-            throw new InvalidArgumentException(sprintf(
-                'A similar route name (%s) has already been provided.',
-                $route->getName()
-            ));
+            throw InvalidArgumentException::invalidRoutePath($route->getName());
         }
 
         $this->routes[$route->getName()] = $route;
@@ -113,7 +104,7 @@ class FastRouteRouter implements RouterInterface
      */
     public function match(ServerRequestInterface $request): RouteResultInterface
     {
-        $dispatcher = $this->getDispatcher(function(RouteCollector $collector) {
+        $dispatcher = $this->getDispatcher(function (RouteCollector $collector) {
             foreach ($this->routes as $route) {
                 $collector->addRoute($route->getAllowedMethods(), $route->getPath(), $route->getName());
             }
@@ -136,7 +127,7 @@ class FastRouteRouter implements RouterInterface
 
     /**
      * @param string $name
-     * @param array $substitutions
+     * @param array<string, string> $substitutions
      * @return string
      * @throws InvalidArgumentException
      * @throws RuntimeException
@@ -144,10 +135,7 @@ class FastRouteRouter implements RouterInterface
     public function generateUri(string $name, array $substitutions = []): string
     {
         if (!isset($this->routes[$name])) {
-            throw new InvalidArgumentException(sprintf(
-                'The route named %s is unknown...',
-                $name
-            ));
+            throw InvalidArgumentException::routeNameIsUnknown($name);
         }
 
         // Reverse the array so we start by the longest possible URI.
@@ -161,16 +149,12 @@ class FastRouteRouter implements RouterInterface
             return $this->buildUri($parts, $substitutions);
         }
 
-        throw new RuntimeException(sprintf(
-            'Unable to generate URI "%s", missing substitutions, only received : %s...',
-            $this->routes[$name]->getPath(),
-            implode(', ', $substitutions)
-        ));
+        throw RuntimeException::unableToGenerateUri($this->routes[$name]->getPath(), $substitutions);
     }
 
     /**
-     * @param array $parts
-     * @param array $substitutions
+     * @param array<string, mixed> $parts
+     * @param array<string, string> $substitutions
      * @return bool
      */
     protected function routeCanBeGenerated(array $parts, array $substitutions): bool
@@ -189,8 +173,8 @@ class FastRouteRouter implements RouterInterface
     }
 
     /**
-     * @param array $parts
-     * @param array $substitutions
+     * @param array<string, mixed> $parts
+     * @param array<string, string> $substitutions
      * @return string
      * @throws RuntimeException
      */
@@ -203,13 +187,12 @@ class FastRouteRouter implements RouterInterface
                 continue;
             }
 
-            if (!preg_match('#^'.$part[1].'$#', (string)$substitutions[$part[0]])) {
-                throw new RuntimeException(sprintf(
-                    'Given substitution for "%s" (= %s) does not match the route constraint "%s"...',
+            if (!preg_match('#^' . $part[1] . '$#', (string)$substitutions[$part[0]])) {
+                throw RuntimeException::substitutionDoesNotMatchRouteConstraint(
                     $part[0],
                     (string)$substitutions[$part[0]],
                     $part[1]
-                ));
+                );
             }
 
             $uri .= $substitutions[$part[0]];

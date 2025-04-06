@@ -1,9 +1,13 @@
 <?php
 
+use Borsch\Router\Contract\RouteResultInterface;
+use Borsch\Router\FastRouteRouter;
+use Borsch\Router\Exception\{InvalidArgumentException, RuntimeException};
 use Borsch\Router\Route;
-use Borsch\Router\RouteResultInterface;
 use BorschTest\Mockup\TestHandler;
 use Laminas\Diactoros\ServerRequest;
+
+covers(FastRouteRouter::class);
 
 test('getCacheFile()', function() {
     expect($this->router->getCacheFile())->toBeNull();
