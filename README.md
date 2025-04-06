@@ -114,7 +114,7 @@ $response = $route->getHandler()->handle($server_request);
 |---------------------------|---------------------------------------|-------|-----------|------------------|------------|----------------|
 | `FastRouteRouter`         | A `nikic/fast-route` based router     | ✅     | Medium    | Fast             | ✅          | ✅             |
 | `TreeRouter`              | A tree based router                   | ✅     | Fast      | Very fast        | ✅          | ❌             |
-| `SimpleConditionalRouter` | A very simple comparator based router | ❌     | Very fast | Very fast        | ❌          | ❌              |
+| `SimpleConditionalRouter` | A very simple comparator based router | ❌     | Very fast | ❌                | ❌          | ❌              |
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
