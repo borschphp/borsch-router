@@ -128,11 +128,10 @@ class TreeRouter implements RouterInterface
         }
 
         $allowed_methods = $node->route->getAllowedMethods();
-        if (!in_array($method, $allowed_methods)) {
-            return RouteResult::fromRouteFailure($allowed_methods);
-        }
 
-        return RouteResult::fromRouteSuccess($node->route, $params);
+        return (!in_array($method, $allowed_methods)) ?
+            RouteResult::fromRouteFailure($allowed_methods) :
+            RouteResult::fromRouteSuccess($node->route, $params);
     }
 
     /**
