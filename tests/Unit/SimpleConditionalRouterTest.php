@@ -1,6 +1,7 @@
 <?php
 
 use Borsch\Router\Contract\RouteResultInterface;
+use Borsch\Router\Exception\InvalidArgumentException;
 use Borsch\Router\Route;
 use Borsch\Router\SimpleConditionalRouter;
 use BorschTest\Mockup\TestHandler;

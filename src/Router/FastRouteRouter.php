@@ -85,7 +85,7 @@ class FastRouteRouter implements RouterInterface
     public function addRoute(RouteInterface $route): void
     {
         if (isset($this->routes[$route->getName()])) {
-            throw InvalidArgumentException::invalidRoutePath($route->getName());
+            throw InvalidArgumentException::routeNameAlreadyExists($route->getName());
         }
 
         $this->routes[$route->getName()] = $route;
