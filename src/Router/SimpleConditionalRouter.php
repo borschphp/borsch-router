@@ -5,8 +5,8 @@ namespace Borsch\Router;
 use Borsch\Router\Contract\RouteInterface;
 use Borsch\Router\Contract\RouteResultInterface;
 use Borsch\Router\Contract\RouterInterface;
+use Borsch\Router\Exception\InvalidArgumentException;
 use Borsch\Router\Result\RouteResult;
-use InvalidArgumentException;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
@@ -17,22 +17,24 @@ use Psr\Http\Message\ServerRequestInterface;
 class SimpleConditionalRouter implements RouterInterface
 {
 
-    /** @var RouteInterface[] */
+    /** @var array<string, RouteInterface> */
     protected array $routes = [];
+
+    /** @var array<string, RouteInterface> */
+    protected array $routes_by_path = [];
 
     /**
      * @inheritDoc
+     * @throws InvalidArgumentException
      */
     public function addRoute(RouteInterface $route): void
     {
         if (isset($this->routes[$route->getName()])) {
-            throw new InvalidArgumentException(sprintf(
-                'A similar route name (%s) has already been provided.',
-                $route->getName()
-            ));
+            throw InvalidArgumentException::routeNameAlreadyExists($route->getName());
         }
 
         $this->routes[$route->getName()] = $route;
+        $this->routes_by_path[$route->getPath()] = $route;
     }
 
     /**
@@ -48,14 +50,13 @@ class SimpleConditionalRouter implements RouterInterface
      */
     public function match(ServerRequestInterface $request): RouteResultInterface
     {
-        foreach ($this->routes as $route) {
-            if ($request->getUri()->getPath() == $route->getPath()) {
-                $allowed_methods = $route->getAllowedMethods();
+        if (isset($this->routes_by_path[$request->getUri()->getPath()])) {
+            $route = $this->routes_by_path[$request->getUri()->getPath()];
+            $allowed_methods = $route->getAllowedMethods();
 
-                return in_array($request->getMethod(), $allowed_methods) ?
-                    RouteResult::fromRouteSuccess($route) :
-                    RouteResult::fromRouteFailure($allowed_methods);
-            }
+            return in_array($request->getMethod(), $allowed_methods) ?
+                RouteResult::fromRouteSuccess($route) :
+                RouteResult::fromRouteFailure($allowed_methods);
         }
 
         return RouteResult::fromRouteFailure([]);
