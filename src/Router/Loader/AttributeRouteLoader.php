@@ -2,6 +2,7 @@
 
 namespace Borsch\Router\Loader;
 
+use ReflectionAttribute;
 use Borsch\Router\Attribute\{Route as RouteAttribute, Controller};
 use Borsch\Router\Route;
 use Psr\Container\ContainerInterface;
@@ -34,11 +35,11 @@ class AttributeRouteLoader
             foreach ($classes as $class) {
                 $ref = new ReflectionClass($class);
 
-                foreach ($ref->getAttributes(Controller::class) as $attribute) {
+                foreach ($ref->getAttributes(Controller::class, ReflectionAttribute::IS_INSTANCEOF) as $attribute) {
                     $controller = $attribute->newInstance();
 
                     foreach ($ref->getMethods() as $method) {
-                        foreach ($method->getAttributes(RouteAttribute::class) as $attr) {
+                        foreach ($method->getAttributes(RouteAttribute::class, ReflectionAttribute::IS_INSTANCEOF) as $attr) {
                             $route = $attr->newInstance();
                             $this->routes[] = new Route(
                                 $route->methods,
@@ -76,6 +77,10 @@ class AttributeRouteLoader
      */
     public function getRoutes(): array
     {
-        return $this->routes;
+        $routes = $this->routes;
+
+        usort($routes, fn(Route $a, Route $b) => $a->getPriority() <=> $b->getPriority());
+
+        return $routes;
     }
 }
