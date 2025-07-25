@@ -19,7 +19,8 @@ class Route implements RouteInterface
         protected array $methods,
         protected string $path,
         protected RequestHandlerInterface $handler,
-        protected ?string $name = null
+        protected ?string $name = null,
+        protected int $priority = 0
     ) {
         $this->methods = array_map('strtoupper', array_filter($methods, 'is_string'));
         $this->name = $name ?: sprintf(
@@ -75,5 +76,10 @@ class Route implements RouteInterface
     public function allowsMethod(string $method): bool
     {
         return in_array(strtoupper($method), $this->methods);
+    }
+
+    public function getPriority(): int
+    {
+        return $this->priority;
     }
 }

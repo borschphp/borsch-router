@@ -11,14 +11,16 @@
   "require": {
     "php": "^8.2",
     "psr/http-message": "^1||^2",
-    "psr/http-server-handler": "^1",
+    "psr/http-server-handler": "^1.0",
     "psr/http-server-middleware": "^1",
-    "nikic/fast-route": "^v1.3"
+    "nikic/fast-route": "^v1.3",
+    "symfony/finder": "^7.3"
   },
   "require-dev": {
     "laminas/laminas-diactoros": "^3",
     "pestphp/pest": "^3.0",
-    "phpstan/phpstan": "^2.1"
+    "phpstan/phpstan": "^2.1",
+    "borschphp/container": "^1.1"
   },
   "autoload": {
     "psr-4": {

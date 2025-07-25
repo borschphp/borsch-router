@@ -40,7 +40,7 @@ jobs:
         run: composer install --prefer-dist --no-interaction --no-progress --ignore-platform-reqs
 
       - name: Run test suite
-        run:  ./vendor/bin/pest tests
+        run:  ./vendor/bin/pest tests --parallel
 
       - name: Run mutation tests
         run:  XDEBUG_MODE=coverage ./vendor/bin/pest --mutate --parallel --min=70

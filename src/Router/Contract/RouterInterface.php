@@ -14,7 +14,7 @@ interface RouterInterface
     /**
      * @param RouteInterface $route
      * @return void
-     * @throws InvalidArgumentException If a route with same name already exists.
+     * @throws InvalidArgumentException If a route with the same name already exists.
      */
     public function addRoute(RouteInterface $route): void;
 
