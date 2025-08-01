@@ -3,6 +3,7 @@
 namespace Borsch\Router\Exception;
 
 use Exception;
+use Psr\Http\Server\RequestHandlerInterface;
 
 class RuntimeException extends Exception
 {
@@ -26,6 +27,15 @@ class RuntimeException extends Exception
             $name,
             $substitution,
             $constraint
+        ));
+    }
+
+    public static function notARequestHandler(string $id): self
+    {
+        return new self(sprintf(
+            'Handler with ID "%s" must implement %s...',
+            $id,
+            RequestHandlerInterface::class
         ));
     }
 }

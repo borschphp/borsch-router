@@ -2,14 +2,15 @@
 
 namespace Borsch\Router\Loader;
 
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 use ReflectionAttribute;
 use Borsch\Router\Attribute\{Route as RouteAttribute, Controller};
 use Borsch\Router\Route;
 use Psr\Container\ContainerInterface;
 use ReflectionClass;
 use ReflectionException;
-use Symfony\Component\Finder\Finder;
-use function array_diff, array_filter, get_declared_classes, realpath;
+use function array_diff, array_filter, array_merge, get_declared_classes, realpath;
 
 class AttributeRouteLoader
 {
@@ -23,14 +24,18 @@ class AttributeRouteLoader
         private readonly ContainerInterface $container
     ) {}
 
-    public function load(): void
+    /**
+     * @throws ReflectionException
+     */
+    public function load(): self
     {
-        $finder = new Finder();
-        $finder->files()->in($this->directories)->name('*.php');
+        $files = [];
+        foreach ($this->directories as $directory) {
+            $files = array_merge($files, $this->findPhpFiles($directory));
+        }
 
-        foreach ($finder as $file) {
-            $file_path = $file->getRealPath();
-            $classes = $this->loadAndFindDeclaredClasses($file_path);
+        foreach ($files as $file) {
+            $classes = $this->loadAndFindDeclaredClasses($file);
 
             foreach ($classes as $class) {
                 $ref = new ReflectionClass($class);
@@ -44,14 +49,34 @@ class AttributeRouteLoader
                             $this->routes[] = new Route(
                                 $route->methods,
                                 $controller->base_path . $route->path,
-                                $this->container->get($class),
-                                $route->name ?? null
+                                new LazyRequestHandler($class, $this->container),
+                                $route->name ?? null,
+                                $route->priority ?? null
                             );
                         }
                     }
                 }
             }
         }
+
+        return $this;
+    }
+
+    /** @return string[] */
+    private function findPhpFiles(string $directory): array
+    {
+        $results = [];
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($directory, RecursiveDirectoryIterator::SKIP_DOTS)
+        );
+
+        foreach ($iterator as $file) {
+            if ($file->isFile() && $file->getExtension() === 'php') {
+                $results[] = $file->getRealPath();
+            }
+        }
+
+        return $results;
     }
 
     /**
