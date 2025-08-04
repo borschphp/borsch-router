@@ -21,7 +21,7 @@ uses()
     ->beforeAll(function () {
         $cache_file = __DIR__.'/cache/routes.cache.php';
         if (file_exists($cache_file)) {
-            unlink($cache_file);
+//            unlink($cache_file);
         }
     })
     ->beforeEach(function () {
@@ -30,7 +30,7 @@ uses()
     ->afterEach(function () {
         $cache_file = __DIR__.'/cache/routes.cache.php';
         if (file_exists($cache_file)) {
-            unlink($cache_file);
+//            unlink($cache_file);
         }
     })
     ->in('Unit/FastRouteRouterTest.php');
@@ -51,13 +51,13 @@ uses()
     ->beforeAll(function () {
         $cache_file = __DIR__.'/cache/loader.routes.cache.php';
         if (file_exists($cache_file)) {
-            unlink($cache_file);
+//            unlink($cache_file);
         }
     })
     ->afterEach(function () {
         $cache_file = __DIR__.'/cache/loader.routes.cache.php';
         if (file_exists($cache_file)) {
-            unlink($cache_file);
+//            unlink($cache_file);
         }
     })
     ->in('Unit/AttributeRouteLoaderTest.php');

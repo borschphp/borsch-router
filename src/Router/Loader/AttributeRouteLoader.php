@@ -97,7 +97,7 @@ class AttributeRouteLoader
 
     private function uncacheRoute(): void
     {
-        $cached_routes = require $this->cache_file;
+        $cached_routes = require_once $this->cache_file;
         if (!$cached_routes || !is_array($cached_routes) || !count($cached_routes)) {
             return;
         }
