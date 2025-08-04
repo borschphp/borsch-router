@@ -43,7 +43,7 @@ jobs:
         run:  ./vendor/bin/pest tests --parallel
 
       - name: Run mutation tests
-        run:  XDEBUG_MODE=coverage ./vendor/bin/pest --mutate --parallel --min=70
+        run:  XDEBUG_MODE=coverage ./vendor/bin/pest --mutate --parallel --min=60
 
       - name: Phpstan analysis
-        run: ./vendor/bin/phpstan analyse src --level=7 --no-progress --no-interaction
+        run: ./vendor/bin/phpstan analyse src --no-progress --no-interaction

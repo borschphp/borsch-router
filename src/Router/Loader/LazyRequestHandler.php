@@ -11,7 +11,7 @@ readonly class LazyRequestHandler implements RequestHandlerInterface
 {
 
     public function __construct(
-        private string $id,
+        public string $id,
         private ContainerInterface $container
     ) {}
 
